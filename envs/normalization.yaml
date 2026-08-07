@@ -1,9 +1,4 @@
 name: normalization
-channels:  
-- conda-forge  
-- bioconda  
-- anaconda
-- defaults
 dependencies:
 - parallel=20250222
 - python=3.11

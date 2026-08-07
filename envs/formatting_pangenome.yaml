@@ -1,9 +1,4 @@
 name: formattingPangenome
-channels:
-- conda-forge
-- anaconda
-- bioconda
-- defaults
 dependencies:
 - seqtk
 - openjdk=17.0.3

@@ -1,9 +1,4 @@
 name: seqtk
-channels:  
-- conda-forge
-- bioconda  
-- anaconda
-- defaults
 dependencies:  
 - parallel
 - seqtk

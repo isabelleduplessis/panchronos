@@ -1,9 +1,4 @@
 name: panaroo
-channels:  
-- conda-forge  
-- bioconda  
-- anaconda
-- defaults
 dependencies:  
 - panaroo=1.5.2
 - numpy=1.26.4

@@ -1,7 +1,4 @@
 name: blast
-channels:
- - conda-forge
- - bioconda
 dependencies:
  - blast=2.16.0
  - zstd

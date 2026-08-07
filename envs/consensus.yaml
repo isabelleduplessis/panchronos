@@ -1,8 +1,4 @@
 name: consensus
-channels:
-- conda-forge
-- bioconda
-- defaults
 dependencies:
 - parallel=20250222
 - bcftools=1.21

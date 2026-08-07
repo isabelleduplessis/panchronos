@@ -1,8 +1,4 @@
 name: extend_sequences
-channels:
-- conda-forge
-- bioconda
-- defaults
 dependencies:
 - parallel=20250222
 - samtools=1.21

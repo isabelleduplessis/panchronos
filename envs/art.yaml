@@ -1,8 +1,4 @@
 name: art
-channels:
- - conda-forge
- - bioconda
- - defaults
 dependencies:
  - parallel=20250222
  - art

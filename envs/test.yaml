@@ -1,7 +1,3 @@
 name: gargammel
-channels:
-- conda-forge
-- bioconda
-- defaults
 dependencies:
 - gargammel
