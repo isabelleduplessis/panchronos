@@ -2,7 +2,8 @@
 
 process TREE_CORE {
     conda "${projectDir}/envs/iqtree.yaml"
-        
+    label 'demand_4'
+
     input:
     path ubiquitousMSA, stageAs: 'maskedMatrixGenesUbiquitousMSA.fasta'
     val threads

@@ -2,6 +2,7 @@
 
 process TREE_THRESHOLD {
 	conda "${projectDir}/envs/iqtree.yaml"
+	label 'demand_4'
 	
 	input:
 	path genesMSA, stageAs: 'genesAbovePercentMSA.fasta'
@@ -18,6 +19,7 @@ process TREE_THRESHOLD {
 	#!/bin/bash
 
 	mkdir -p ${params.output}/TREE/
+
 
 
 	awk '/^>/ {

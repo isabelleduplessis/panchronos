@@ -1,5 +1,6 @@
 process TREE_ACCESSORY {
     conda "${projectDir}/envs/iqtree.yaml"
+    label 'demand_4'
         
     input:
     path noUbiquitousMSA, stageAs: 'maskedMatrixGenesNoUbiquitousMSA.fasta'

@@ -1,6 +1,7 @@
 
 process TREE_ANCIENT {
     conda "${projectDir}/envs/iqtree.yaml"
+    label 'demand_4'
        
     input:
     path ancientMSA, stageAs: 'maskedMatrixGenesOnlyAncientMSA.fasta'
@@ -17,6 +18,7 @@ process TREE_ANCIENT {
     #!/bin/bash
 
     mkdir -p ${params.output}/TREE/
+
 
 
     awk '/^>/ {
