@@ -9,6 +9,7 @@ process GET_DATA {
 	val genomes
 	val tax_id
 	val parallel
+        val seed
 
 	output:
 	path '*fasta', emit: fasta_files
@@ -22,7 +23,7 @@ process GET_DATA {
 	| esummary \
 	| xtract -pattern DocumentSummary -element FtpPath_RefSeq FtpPath_GenBank \
 	| awk '{print (\$1 != "-" ? \$1 : \$2)}' \
-	| head -n $genomes >> links.txt
+        | shuf --random-source=<(yes "$seed") | head -n $genomes >> links.txt
 
         #split those links to use parallel
 	mkdir -p links
@@ -54,7 +55,24 @@ process GET_DATA {
                                 attempt=\$((attempt + 1))
                         else
                                 #change file extension and name
-                                name=\$(head -n 1 "\${filename}_genomic.fna" | awk -F',' '{print \$1}' | sed -e 's/^>//' -e 's/[ -/().+]/_/g')
+                                # extract accession from FASTA header
+                                accession=\$(head -n 1 "\${filename}_genomic.fna" | awk '{print \$1}' | sed -e 's/^>//' -e 's/[ -/().+]/_/g')
+
+                                # extract organism, strain, serotype, genotype, collection_date
+                                organism=\$(grep -oP '(?<=/organism=")[^"]+' "\${filename}_genomic.gbff" | head -n1 | sed -e 's/[ -/().+]/_/g')
+                                strain=\$(grep -oP '(?<=/strain=")[^"]+' "\${filename}_genomic.gbff" | head -n1 | sed -e 's/[ -/().+]/_/g')
+                                serotype=\$(grep -oP '(?<=/serotype=")[^"]+' "\${filename}_genomic.gbff" | head -n1 | sed -e 's/[ -/().+]/_/g')
+                                genotype=\$(grep -oP '(?<=/genotype=")[^"]+' "\${filename}_genomic.gbff" | head -n1 | sed -e 's/[ -/().+]/_/g')
+                                collection_date=\$(grep -oP '(?<=/collection_date=")[^"]+' "\${filename}_genomic.gbff" | head -n1 | sed -e 's/[ -/().+]/_/g')
+
+                                [ -z "\$accession" ] && accession="NA"
+                                [ -z "\$organism" ] && organism="NA"
+                                [ -z "\$strain" ] && strain="NA"
+                                [ -z "\$serotype" ] && serotype="NA"
+                                [ -z "\$genotype" ] && genotype="NA"
+                                [ -z "\$collection_date" ] && collection_date="NA"
+
+                                name="\${accession}_\${organism}_strain\${strain}_sero\${serotype}_geno\${genotype}_date\${collection_date}"
 
                                 mv "\${filename}_genomic.gbff" ./"\${name}.gb"
                                 mv "\${filename}_genomic.fna" ./"\${name}.fasta"
