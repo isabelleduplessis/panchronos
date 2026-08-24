@@ -15,7 +15,27 @@ process GET_OUTGROUP {
 	"""
 	#!/bin/bash
 	counter=0
-	esearch -db assembly -query "txid${outgroup_ID}[Organism] AND (latest[filter] AND (complete genome[filter] OR chromosome level[filter]))" | esummary | xtract -pattern DocumentSummary -element FtpPath_RefSeq | while read url; do
+	esearch -db assembly -query "txid${outgroup_ID}[Organism] AND (latest[filter] AND (complete genome[filter] OR chromosome level[filter] OR scaffold level[filter] OR contig level[filter]))" \\
+		| esummary \\
+		| xtract -pattern DocumentSummary -element RefSeq_category AssemblyStatus FtpPath_RefSeq \\
+		| awk -F'\\t' '{
+			category=\$1
+			status=\$2
+			cat_priority=3
+			if (category == "reference genome") cat_priority=1
+			else if (category == "representative genome") cat_priority=2
+
+			stat_priority=5
+			if (status == "Complete Genome") stat_priority=1
+			else if (status == "Chromosome") stat_priority=2
+			else if (status == "Scaffold") stat_priority=3
+			else if (status == "Contig") stat_priority=4
+
+			print cat_priority "\\t" stat_priority "\\t" \$0
+		}' \\
+		| sort -t \$'\\t' -k1,1n -k2,2n \\
+		| cut -f5 \\
+		| while read url; do
         
 		if [ "\$counter" -ge 1 ]; then
 			break
