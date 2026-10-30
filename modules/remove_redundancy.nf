@@ -5,6 +5,8 @@
 process REMOVE_REDUNDANCY {
 
         conda "${projectDir}/envs/remove_redundancy.yaml"
+	time   '7d'
+    	cpus   30
 
         input:
         tuple path(fasta_files), path(gb_files)
@@ -17,6 +19,7 @@ process REMOVE_REDUNDANCY {
         script:
         """
         #!/bin/bash
+	ml parallel/20220722-GCCcore-11.3.0
 
 
         echo -e "Concatenating, formatting and replacing unusual characters in FASTA sequences.\n"
@@ -41,7 +44,8 @@ process REMOVE_REDUNDANCY {
         echo -e  "Clustering sequences\n"
 
         find ./ -name "*.fasta" > genomesList.txt
-        fastANI --ql genomesList.txt --rl genomesList.txt --threads $threads -o fastaniOutput.txt
+        #fastANI --ql genomesList.txt --rl genomesList.txt --threads $threads -o fastaniOutput.txt
+	skani triangle -l genomesList.txt -t $threads -E -o fastaniOutput.txt # ID adding this to make it faster
 
 
         # first step: Ignore identical pairs, find samples with 100% identity and only pick one representative.
