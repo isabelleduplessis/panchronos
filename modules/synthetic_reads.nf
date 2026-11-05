@@ -36,6 +36,7 @@ process SYNTHETIC_READS {
 
 process SYNTHETIC_READS_ALIGNMENT {
         conda "${projectDir}/envs/alignment.yaml"
+	label 'demand_5'
 
         input:
         path synthetic_reads
